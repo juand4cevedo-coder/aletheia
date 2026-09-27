@@ -17,5 +17,21 @@ services:
       timeout: 3s
       retries: 10
 
+  storage:
+    image: chrislusf/seaweedfs:4.47
+    command:
+      - mini
+      - -dir=/data
+      - -bucket=${STORAGE_BUCKET:?STORAGE_BUCKET is required}
+      - -admin.ui=false
+    environment:
+      AWS_ACCESS_KEY_ID: ${STORAGE_ACCESS_KEY:?STORAGE_ACCESS_KEY is required}
+      AWS_SECRET_ACCESS_KEY: ${STORAGE_SECRET_KEY:?STORAGE_SECRET_KEY is required}
+    ports:
+      - "127.0.0.1:${STORAGE_PORT:-8333}:8333"
+    volumes:
+      - storage-data:/data
+
 volumes:
   postgres-data:
+  storage-data:
