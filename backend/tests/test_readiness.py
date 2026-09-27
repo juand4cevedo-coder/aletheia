@@ -26,7 +26,11 @@ def test_readiness_returns_503_when_database_is_unavailable(client: TestClient) 
     response = client.get("/health/ready")
 
     assert response.status_code == 503
-    assert response.json() == {"detail": "Database unavailable"}
+    assert response.json() == {
+        "code": "SERVICE_UNAVAILABLE",
+        "message": "The service is temporarily unavailable.",
+        "request_id": response.headers["X-Request-ID"],
+    }
 
 
 @pytest.mark.integration
