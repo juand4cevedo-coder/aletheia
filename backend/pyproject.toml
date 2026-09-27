@@ -13,6 +13,7 @@ dependencies = [
     "boto3>=1.43.103",
     "email-validator>=2.3.0",
     "fastapi[standard]>=0.141.1",
+    "filetype>=1.2.0",
     "psycopg[binary]>=3.3.6",
     "pydantic-settings>=2.15.0",
     "sqlalchemy>=2.1.1",

@@ -22,4 +22,10 @@ def test_editor_can_update_but_not_manage_members() -> None:
 
 
 def test_viewer_can_only_read() -> None:
-    assert case_permissions_for(CaseRole.VIEWER) == frozenset({CasePermission.READ})
+    assert case_permissions_for(CaseRole.VIEWER) == frozenset(
+        {CasePermission.READ, CasePermission.EVIDENCE_READ}
+    )
+
+
+def test_viewer_cannot_add_evidence() -> None:
+    assert CasePermission.EVIDENCE_CREATE not in case_permissions_for(CaseRole.VIEWER)

@@ -1,6 +1,6 @@
 import base64
 from functools import lru_cache
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, BinaryIO
 
 import boto3
 from botocore.config import Config
@@ -31,7 +31,9 @@ class ObjectStorage:
         self._client = client
         self._bucket = bucket
 
-    def put_new_object(self, key: str, data: bytes, *, sha256_hex: str, content_type: str) -> None:
+    def put_new_object(
+        self, key: str, data: bytes | BinaryIO, *, sha256_hex: str, content_type: str
+    ) -> None:
         """Store `data` under `key` only if no object exists there yet.
 
         The storage verifies the SHA-256 on arrival and rejects the upload if it
