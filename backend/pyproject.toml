@@ -24,6 +24,7 @@ build-backend = "uv_build"
 [dependency-groups]
 dev = [
     "httpx2>=2.13.1",
+    "pyright>=1.1.414",
     "pytest>=9.1.1",
     "ruff>=0.16.9",
 ]
@@ -139,3 +140,8 @@ name = "ruff_check"
 type = "module"
 module = "ruff"
 options = "check --fix REVISION_SCRIPT_FILENAME"
+
+[tool.pyright]
+include = ["src", "tests", "migrations"]
+venvPath = "."
+venv = ".venv"
