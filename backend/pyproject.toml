@@ -9,6 +9,9 @@ authors = [
 requires-python = ">=3.14"
 dependencies = [
     "fastapi[standard]>=0.141.1",
+    "psycopg[binary]>=3.3.6",
+    "pydantic-settings>=2.15.0",
+    "sqlalchemy>=2.1.1",
 ]
 
 [build-system]
@@ -28,6 +31,7 @@ entrypoint = "aletheia.main:app"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 filterwarnings = ["error"]
+markers = ["integration: requires a running PostgreSQL instance"]
 
 [tool.ruff]
 line-length = 100
