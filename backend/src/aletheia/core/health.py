@@ -1,10 +1,6 @@
 import logging
 from typing import Annotated, Literal
 
-logger = logging.getLogger(__name__)
-
-from typing import Annotated, Literal
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
 from sqlalchemy import text
@@ -12,6 +8,8 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from aletheia.core.database import get_db_session
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["health"])
 
