@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from aletheia.core.database import get_db_session
 from aletheia.core.errors import ErrorResponse, ServiceUnavailableError
+from aletheia.core.storage import ObjectStorage, StorageError, get_storage
 
 logger = logging.getLogger(__name__)
 
@@ -25,10 +26,18 @@ def health() -> HealthResponse:
 
 
 @router.get("/health/ready", responses={503: {"model": ErrorResponse}})
-def readiness(session: Annotated[Session, Depends(get_db_session)]) -> HealthResponse:
+def readiness(
+    session: Annotated[Session, Depends(get_db_session)],
+    storage: Annotated[ObjectStorage, Depends(get_storage)],
+) -> HealthResponse:
     try:
         session.execute(text("SELECT 1"))
     except SQLAlchemyError as exc:
         logger.warning("Database readiness check failed", exc_info=exc)
+        raise ServiceUnavailableError() from exc
+    try:
+        storage.check_ready()
+    except StorageError as exc:
+        logger.warning("Object storage readiness check failed", exc_info=exc)
         raise ServiceUnavailableError() from exc
     return HealthResponse(status="ok")

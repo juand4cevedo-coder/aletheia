@@ -18,6 +18,12 @@ class Settings(BaseSettings):
     db_password: SecretStr
     db_name: str
 
+    storage_endpoint_url: str
+    storage_access_key: str
+    storage_secret_key: SecretStr
+    storage_bucket: str
+    storage_region: str = "us-east-1"
+
     access_token_ttl_minutes: int = 15
     session_ttl_days: int = 14
 
