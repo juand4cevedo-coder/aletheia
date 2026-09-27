@@ -29,6 +29,7 @@ class AppError(Exception):
     status_code: int = status.HTTP_500_INTERNAL_SERVER_ERROR
     code: str = "INTERNAL_ERROR"
     message: str = "An unexpected error occurred."
+    headers: dict[str, str] | None = None
 
 
 class ServiceUnavailableError(AppError):
@@ -50,19 +51,26 @@ def _error_response(
     code: str,
     message: str,
     details: list[ErrorDetail] | None = None,
+    headers: dict[str, str] | None = None,
 ) -> JSONResponse:
     request_id = get_request_id(request)
     body = ErrorResponse(code=code, message=message, request_id=request_id, details=details)
     return JSONResponse(
         status_code=status_code,
         content=body.model_dump(exclude_none=True),
-        headers={REQUEST_ID_HEADER: request_id},
+        headers={**(headers or {}), REQUEST_ID_HEADER: request_id},
     )
 
 
 async def _handle_app_error(request: Request, exc: Exception) -> JSONResponse:
     assert isinstance(exc, AppError)
-    return _error_response(request, status_code=exc.status_code, code=exc.code, message=exc.message)
+    return _error_response(
+        request,
+        status_code=exc.status_code,
+        code=exc.code,
+        message=exc.message,
+        headers=exc.headers,
+    )
 
 
 async def _handle_validation_error(request: Request, exc: Exception) -> JSONResponse:

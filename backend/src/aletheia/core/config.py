@@ -18,7 +18,11 @@ class Settings(BaseSettings):
     db_password: SecretStr
     db_name: str
 
+    access_token_ttl_minutes: int = 15
+    session_ttl_days: int = 14
+
 
 @lru_cache
 def get_settings() -> Settings:
-    return Settings()
+    # Values come from the environment and .env; Pyright cannot see that.
+    return Settings()  # pyright: ignore[reportCallIssue]
