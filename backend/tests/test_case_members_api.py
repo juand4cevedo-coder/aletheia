@@ -98,7 +98,7 @@ def test_case_detail_exposes_the_callers_permissions(
 
     response = api_client.get(firm["case_url"], headers=firm["colleague"].headers)
 
-    assert response.json()["my_permissions"] == ["case:read"]
+    assert response.json()["my_permissions"] == ["case:read", "evidence:read"]
 
 
 # --- managing members --------------------------------------------------------

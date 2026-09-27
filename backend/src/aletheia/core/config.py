@@ -24,6 +24,8 @@ class Settings(BaseSettings):
     storage_bucket: str
     storage_region: str = "us-east-1"
 
+    evidence_max_bytes: int = 100 * 1024 * 1024
+
     access_token_ttl_minutes: int = 15
     session_ttl_days: int = 14
 
