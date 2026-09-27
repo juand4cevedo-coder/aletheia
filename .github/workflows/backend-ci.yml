@@ -44,12 +44,32 @@ jobs:
       ALETHEIA_DB_USER: aletheia
       ALETHEIA_DB_PASSWORD: aletheia-ci
       ALETHEIA_DB_NAME: aletheia_test
+      ALETHEIA_STORAGE_ENDPOINT_URL: http://localhost:8333
+      ALETHEIA_STORAGE_ACCESS_KEY: aletheia-ci
+      ALETHEIA_STORAGE_SECRET_KEY: aletheia-ci-secret
+      ALETHEIA_STORAGE_BUCKET: aletheia-evidence
 
     steps:
       - name: Check out the repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+
+      - name: Start object storage
+        run: |
+          docker run --detach --name storage --publish 8333:8333 \
+            --env AWS_ACCESS_KEY_ID="$ALETHEIA_STORAGE_ACCESS_KEY" \
+            --env AWS_SECRET_ACCESS_KEY="$ALETHEIA_STORAGE_SECRET_KEY" \
+            chrislusf/seaweedfs:4.47 \
+            mini -dir=/data -bucket="$ALETHEIA_STORAGE_BUCKET" -admin.ui=false
+          for _ in $(seq 1 30); do
+            if curl --silent --output /dev/null "$ALETHEIA_STORAGE_ENDPOINT_URL"; then
+              exit 0
+            fi
+            sleep 2
+          done
+          docker logs storage
+          exit 1
 
       - name: Install uv
         uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
