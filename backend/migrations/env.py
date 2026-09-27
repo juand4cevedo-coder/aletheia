@@ -4,6 +4,7 @@ from alembic import context
 from sqlalchemy import create_engine, pool
 
 import aletheia.modules.cases.models  # noqa: F401  (registers models on Base.metadata)
+import aletheia.modules.evidence.models  # noqa: F401  (registers models on Base.metadata)
 import aletheia.modules.identity.models  # noqa: F401  (registers models on Base.metadata)
 import aletheia.modules.organizations.models  # noqa: F401  (registers models on Base.metadata)
 from aletheia.core.database import Base, build_database_url
