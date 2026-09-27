@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from aletheia.core.errors import register_error_handlers
 from aletheia.core.health import router as health_router
 from aletheia.core.request_id import RequestIdMiddleware
+from aletheia.modules.cases.router import router as cases_router
 from aletheia.modules.identity.router import router as identity_router
 from aletheia.modules.organizations.router import router as organizations_router
 
@@ -16,6 +17,7 @@ def create_app() -> FastAPI:
     app.include_router(health_router)
     app.include_router(identity_router, prefix=API_V1_PREFIX)
     app.include_router(organizations_router, prefix=API_V1_PREFIX)
+    app.include_router(cases_router, prefix=API_V1_PREFIX)
     return app
 
 
