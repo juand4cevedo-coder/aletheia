@@ -3,6 +3,7 @@ from datetime import datetime
 from functools import lru_cache
 
 from sqlalchemy import URL, DateTime, Engine, MetaData, create_engine
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 from aletheia.core.config import get_settings
@@ -52,3 +53,9 @@ def get_session_factory() -> sessionmaker[Session]:
 def get_db_session() -> Iterator[Session]:
     with get_session_factory()() as session:
         yield session
+
+
+def violated_constraint(error: IntegrityError) -> str | None:
+    """Return the name of the database constraint that caused an IntegrityError."""
+    diagnostics = getattr(error.orig, "diag", None)
+    return getattr(diagnostics, "constraint_name", None)
