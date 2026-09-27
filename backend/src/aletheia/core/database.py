@@ -1,8 +1,9 @@
+import enum
 from collections.abc import Iterator
 from datetime import datetime
 from functools import lru_cache
 
-from sqlalchemy import URL, DateTime, Engine, MetaData, create_engine
+from sqlalchemy import URL, DateTime, Engine, Enum, MetaData, create_engine
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
@@ -22,6 +23,23 @@ class Base(DeclarativeBase):
     type_annotation_map = {
         datetime: DateTime(timezone=True),
     }
+
+
+def enum_values_check(column: str, values: type[enum.StrEnum]) -> str:
+    """SQL condition that restricts `column` to the values of a string enum."""
+    listed = ", ".join(f"'{member.value}'" for member in values)
+    return f"{column} IN ({listed})"
+
+
+def string_enum(enum_class: type[enum.StrEnum]) -> Enum:
+    """Store a string enum as VARCHAR (not a native PostgreSQL ENUM), using its values."""
+    return Enum(
+        enum_class,
+        native_enum=False,
+        create_constraint=False,
+        length=32,
+        values_callable=lambda members: [member.value for member in members],
+    )
 
 
 def build_database_url() -> URL:
