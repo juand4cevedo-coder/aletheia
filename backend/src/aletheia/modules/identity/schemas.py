@@ -1,12 +1,12 @@
 import uuid
-from typing import Annotated, Literal
+from typing import Literal
 
-from pydantic import BaseModel, EmailStr, Field, StringConstraints, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator
+
+from aletheia.shared.types import DisplayName
 
 PASSWORD_MIN_LENGTH = 15
 PASSWORD_MAX_LENGTH = 128
-
-DisplayName = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=200)]
 
 
 class RegisterRequest(BaseModel):
