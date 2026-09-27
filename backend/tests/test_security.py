@@ -30,3 +30,13 @@ def test_verify_password_rejects_a_malformed_hash() -> None:
 
 def test_fresh_hash_does_not_need_rehash() -> None:
     assert not password_needs_rehash(hash_password("correct horse battery staple"))
+
+
+def test_verify_password_normalizes_unicode() -> None:
+    composed = "contraseña segura de prueba"
+    decomposed = "contrasen\u0303a segura de prueba"
+    assert composed != decomposed
+
+    password_hash = hash_password(composed)
+
+    assert verify_password(password=decomposed, password_hash=password_hash)
