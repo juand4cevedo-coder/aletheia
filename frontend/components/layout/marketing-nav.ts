@@ -4,5 +4,6 @@ export const MARKETING_SECTIONS = [
   { href: "/#integridad", label: "Integridad" },
   { href: "/#producto", label: "Producto" },
   { href: "/#confianza", label: "Confianza" },
+  { href: "/#planes", label: "Planes" },
   { href: "/#preguntas", label: "Preguntas" },
 ] as const;

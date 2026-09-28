@@ -3,6 +3,7 @@ import { Faq } from "@/features/landing/faq";
 import { Hero } from "@/features/landing/hero";
 import { Integrity } from "@/features/landing/integrity";
 import { Preservation } from "@/features/landing/preservation";
+import { Pricing } from "@/features/landing/pricing";
 import { Problem } from "@/features/landing/problem";
 import { Product } from "@/features/landing/product";
 import { Traceability } from "@/features/landing/traceability";
@@ -18,6 +19,7 @@ export default function LandingPage() {
             <Integrity />
             <Product />
             <Trust />
+            <Pricing />
             <Faq />
             <CallToAction />
         </>
