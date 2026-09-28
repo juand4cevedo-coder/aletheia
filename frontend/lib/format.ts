@@ -20,3 +20,21 @@ export function groupHash(hash: string, size = 8): string[] {
   }
   return groups;
 }
+
+/** Zona horaria de presentación. La API guarda y devuelve UTC. */
+const DISPLAY_TIME_ZONE = "America/Bogota";
+
+const DATE = new Intl.DateTimeFormat("es-CO", { dateStyle: "medium", timeZone: DISPLAY_TIME_ZONE });
+const DATE_TIME = new Intl.DateTimeFormat("es-CO", {
+  dateStyle: "medium",
+  timeStyle: "short",
+  timeZone: DISPLAY_TIME_ZONE,
+});
+
+export function formatDate(iso: string): string {
+  return DATE.format(new Date(iso));
+}
+
+export function formatDateTime(iso: string): string {
+  return DATE_TIME.format(new Date(iso));
+}
